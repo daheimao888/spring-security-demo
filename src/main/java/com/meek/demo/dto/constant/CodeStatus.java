@@ -41,6 +41,7 @@ public enum CodeStatus {
     PARAM_REQUIRED_MISS(11104, "缺少必选参数,请参考API文档"),
     PARAM_REQUIRED_FAILURE(11104, "token缺失或失效"),
     PARAM_ACCESS_FORBIDDEN(11105, "权限等级不够"),
+    RESULT_FAILED(11106, "系统内部异常"),
 
     ;
 
