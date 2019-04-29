@@ -44,7 +44,6 @@ public class TestController {
         HashMap result = new HashMap();
         result.put("acessToken", UUID.randomUUID().toString());
         result.put("code", "1012");
-
         return result;
     }
 

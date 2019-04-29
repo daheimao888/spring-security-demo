@@ -2,6 +2,7 @@ package com.meek.demo.config;
 
 import com.meek.demo.filter.SecurityAuthAccessDeniedHandler;
 import com.meek.demo.filter.SecurityAuthenticationTokenFilter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,17 +41,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         //权限拒绝后处理
-        SecurityAuthAccessDeniedHandler deniedHandler = new SecurityAuthAccessDeniedHandler();
-        httpSecurity.exceptionHandling().accessDeniedHandler(deniedHandler);
+//        SecurityAuthAccessDeniedHandler deniedHandler = new SecurityAuthAccessDeniedHandler();
+        httpSecurity.exceptionHandling().accessDeniedHandler(getSecurityAuthAccessDeniedHandler());
 
         //过滤器
-        final SecurityAuthenticationTokenFilter filter = new SecurityAuthenticationTokenFilter();
-        httpSecurity.addFilterBefore(filter, BasicAuthenticationFilter.class);
+//        final SecurityAuthenticationTokenFilter filter = new SecurityAuthenticationTokenFilter();
+        httpSecurity.addFilterBefore(getSecurityAuthenticationTokenFilter(), BasicAuthenticationFilter.class);
 
         // 禁用缓存
         httpSecurity.headers().cacheControl();
 
+    }
 
+    @Bean
+    SecurityAuthAccessDeniedHandler getSecurityAuthAccessDeniedHandler(){
+        return new SecurityAuthAccessDeniedHandler();
+    }
+
+    @Bean
+    SecurityAuthenticationTokenFilter getSecurityAuthenticationTokenFilter(){
+        return new SecurityAuthenticationTokenFilter();
     }
 
 

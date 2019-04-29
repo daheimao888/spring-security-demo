@@ -36,6 +36,7 @@ public final class JwtUserFactory {
         System.out.println("JwtUserFactory.create-----");
         //权限 ROLE_ADMIN,ROLE_FLEET
         List<String> roles = new ArrayList<>();
+        roles.add("001");
 /*        roles.add("ROLE_ADMIN");
         roles.add("ROLE_FLEET");*/
 
