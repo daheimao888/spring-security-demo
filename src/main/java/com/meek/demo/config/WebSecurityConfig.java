@@ -2,14 +2,18 @@ package com.meek.demo.config;
 
 import com.meek.demo.filter.SecurityAuthAccessDeniedHandler;
 import com.meek.demo.filter.SecurityAuthenticationTokenFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
 ;
 
 /**
@@ -36,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 // 对于获取token的rest api要允许匿名访问,获取accessToken放开
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/login").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
 
@@ -53,9 +57,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/auth/login");
+    }
+
     @Bean
     SecurityAuthAccessDeniedHandler getSecurityAuthAccessDeniedHandler(){
         return new SecurityAuthAccessDeniedHandler();
+    }
+
+    @Bean
+    public RegistrationBean jwtAuthFilterRegister(SecurityAuthenticationTokenFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
     }
 
     @Bean
